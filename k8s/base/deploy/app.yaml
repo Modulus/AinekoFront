@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name:  aineko
+  name:  aineko-front
   labels:
     name:  aineko
     app: aineko-front
@@ -14,11 +14,11 @@ spec:
   template:
     metadata:
       labels:
-        name:  aineko-settings
+        name:  aineko-front
     spec:
       containers:
       - image:  coderpews/aineko-front:release-1.0.0
-        name:  aineko-settings
+        name:  aineko-front
         resources:
           requests:
             cpu: "20m"

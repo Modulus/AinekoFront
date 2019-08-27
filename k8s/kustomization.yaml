@@ -1,8 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# images:
+#   - name:  aineko-settings 
+#     newTag: "release-1.0.3"
+#   - name: aineko-front
+#     newTag: "release-1.0.0"
 commonLabels:
-  app: aineko
+  owner: snasken
 
 resources:
   - base/config/settings.yaml
+  - base/secret/postgres.yaml
   - base/deploy/app.yaml
   - base/deploy/settings.yaml
   - base/service/settings.yaml

@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name:  settings
+  name:  aineko-settings
   labels:
     name:  settings
     app: aineko-settings
@@ -17,7 +17,7 @@ spec:
         name:  aineko-settings
     spec:
       containers:
-      - image:  coderpews/aineko-settings:release-1.0.1
+      - image:  coderpews/aineko-settings:release-1.0.3
         name:  aineko-settings
         resources:
           requests:
@@ -44,21 +44,21 @@ spec:
               configMapKeyRef:
                 name: settings-config
                 key: PROFILE
-          - name: DB_CONNECTIONS_STRING
+          - name: DB_CONNECTION_STRING
             valueFrom:
               secretKeyRef:
-                name: postgresl
+                name: postgres
                 key: CONNECTION_STRING
-          - name: username
+          - name: DB_USER
             valueFrom:
               secretKeyRef:
-                name: postgresql
-                key: USERNAME
-          - name: password
+                name: postgres
+                key: DB_USER
+          - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: postgresl
-                key: PASSWORD 
+                name: postgres
+                key: DB_PASSWORD 
         ports:
         - containerPort:  8080
           name:  web

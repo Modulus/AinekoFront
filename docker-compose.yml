@@ -19,8 +19,8 @@ services:
     environment:
       profile: production
       DB_CONNECTION_STRING: "jdbc:postgresql://postgres:5432/aineko?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8"
-      username: postgres
-      password: neverever
+      DB_USER: postgres
+      DB_PASSWORD: neverever
     ports:
       - "8090:8080"
 
