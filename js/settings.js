@@ -1,7 +1,9 @@
 
 var urlList = [];
 var postUrl = "http://localhost:8090/sites";
-var getUrl = "http://localhost:8090/site"
+var getUrl = "http://localhost:8090/site/"
+
+
 
 function urlExists(url){
     for(var i = 0; i < urlList.length; i++){
@@ -14,14 +16,25 @@ function urlExists(url){
 
 
 function fetchSites(){
-    $.getJSON(getUrl, function(data){
-        console.log("Found data")
-        console.log(data);
-        for(var i = 0; i < data.length; i++){
-            urlList.push(data[i]);
-            addSite(data[i].url);
+
+    fetch(getUrl, {
+        mode: "cors",
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept" : "application/json"
         }
-    });
+        })
+        .then(function(response){
+            return response.json();
+        }).then(function(json){
+            for(var i = 0; i < json.length; i++){
+                urlList.push(json[i]);
+                addSite(json[i].url);
+            }
+        }).catch(function(error){
+            console.log("Request failed: ", error);
+        });
 }
 
 function deleteUrl(id){
@@ -29,45 +42,75 @@ function deleteUrl(id){
 
     const url = getUrl + "?id="+id
 
-    $.ajax(url, {
-        crossDomain: true,
+    fetch(url, {
+        mode: "cors",
         method: "DELETE",
-    }).done(function(data){
-        console.log(data);
+        headers: {
+            "Content-Type": "application/json",
+            "Accept" : "application/json"
+        }
+    }).then(function(response){
+        return response.status;
+    })
+    .then(function(json){
+        console.log("Response: ", json);
+    })
+    .catch(function(error){
+        console.error("Failed to delete element", error);
     });
+
+    // $.ajax(url, {
+    //     crossDomain: true,
+    //     method: "DELETE",
+    // }).done(function(data){
+    //     console.log(data);
+    // });
 }
 
 function saveUrl(url){
     const saveUlr = getUrl + "?url=" + url;
 
-    $.ajax(saveUlr, {
-        crossDomain: true,
-        dataType: "json",
-        contentType: "application/json; charset=UTF-8",
+    fetch(saveUlr, {
+        mode: "cors",
         method: "PUT",
-    }).done(function(data){
-        console.log(data);
+        headers: {
+            "Content-Type": "application/json",
+            "Accept" : "application/json"
+        }
+    }).then(function(response){
+        console.log("Added site");
+        return response.json();
+    }).then(function(json){
+        console.log("json: ", json)
+    }).catch(function(error){
+        console.error("Failed: ", error);
     });
 }
 
 function addTestData(){
     var input = ["http://www.itavisen.no", "http://www.hardware.no", "http://tv2.no", "http://vg.no", "http://e24.no", "http://dn.no", "http://nrk.no"];
 
-
-    $.ajax(postUrl, {
-        data: JSON.stringify(input),
-        crossDomain: true,
-        dataType: "json",
-        contentType: "application/json; charset=UTF-8",
+    fetch(postUrl, {
+        mode: "cors",
         method: "POST",
-    }).done(function(data){
-        console.log(data);
-    });
+        body: JSON.stringify(input),
+        headers: {
+            "Content-Type": "application/json",
+            "Accept" : "application/json"
+        }
+        })
+        .then(function(response){
+            return response.json();
+        }).then(function(json){
+            init();
+        }).catch(function(error){
+            console.log("Request failed: ", error);
+        });
+
 }
 
 function init(){
     fetchSites();
-    console.log("ENV: ", process.env);
 
   
 }
@@ -87,7 +130,13 @@ function addSite(url){
         var row = document.createElement("tr");
         var urlCell = document.createElement("td");
         var commentCell = document.createElement("td");
-        var removeCell = document.createElement("td");
+        var editCell = document.createElement("td");
+        
+        //Create grouping of buttons
+        var editParagraph = document.createElement("p");
+        editParagraph.className = "buttons";
+        editParagraph.classList.add("is-pulled-right")
+        
 
         // Create remove button with icon and function
         var removeButton = document.createElement("button");
@@ -98,9 +147,43 @@ function addSite(url){
         var minusIcon = document.createElement("i")
         minusIcon.className = "fas";
         minusIcon.classList.add("fa-minus");
-        removeButton.append(minusIcon);
+        minusIcon.classList.add("is-small");
 
-        removeCell.append(removeButton);
+        var removeSpan = document.createElement("span");
+        removeSpan.className = "icon";
+        removeSpan.classList.add("is-small");
+
+        removeSpan.append(minusIcon);
+
+
+        removeButton.append(removeSpan);
+
+
+        // Create edit button with icon and function
+        var editButton = document.createElement("button");
+        editButton.className = "button";
+        editButton.classList.add("is-info");
+        editButton.classList.add("is-pulled-right");
+        
+        var editIcon = document.createElement("i")
+        editIcon.className = "fas";
+        editIcon.classList.add("fa-edit");
+
+        var spanEdit = document.createElement("span");
+        spanEdit.className = "icon";
+        spanEdit.classList.add("is-small");
+
+        spanEdit.append(editIcon);
+
+
+        editButton.append(spanEdit);
+
+        editParagraph.append(editButton);
+        editParagraph.append(removeButton);
+            
+
+        editCell.append(editParagraph);
+        
 
         // Extract text from url and comment
 
@@ -114,7 +197,8 @@ function addSite(url){
 
         row.append(urlCell);
         row.append(commentCell);
-        row.append(removeCell)
+        row.append(editCell);
+        
 
         element["row"] = row;
         element.removeFunction = function(){

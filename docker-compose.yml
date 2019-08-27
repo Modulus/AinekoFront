@@ -12,7 +12,7 @@ services:
     networks:
       - aineko_settings_network
   settings_app:
-    image: coderpews/aineko-settings:release-1.0.1
+    image: coderpews/aineko-settings:release-1.0.3
     container_name: aineko_settings
     networks:
       - aineko_settings_network
@@ -23,7 +23,12 @@ services:
       DB_PASSWORD: neverever
     ports:
       - "8090:8080"
-
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+        - "5000:80"
 networks:
   aineko_settings_network:
     driver: bridge
