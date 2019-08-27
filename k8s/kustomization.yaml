@@ -1,0 +1,9 @@
+commonLabels:
+  app: aineko
+
+resources:
+  - base/config/settings.yaml
+  - base/deploy/app.yaml
+  - base/deploy/settings.yaml
+  - base/service/settings.yaml
+  - base/service/app.yaml

@@ -10,7 +10,11 @@
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+
     <script src='js/settings.js'></script>
+    <script type="text/javascript">
+        init();
+    </script>
 </head>
 <body>
         <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -97,7 +101,7 @@
                             <th>Remove</th>
                     </tr>
               </tfoot> -->
-              <tbody>
+              <tbody id="settingsTableBody">
      
               </tbody>
           </table>
@@ -111,12 +115,37 @@
                 </div>
                 <div class="level-item">
                         <button onclick="addRow()" class="button is-primary"><i class="fas fa-plus"></i></button>
-                    </div>
+                </div>
+                <div class="level-item">
+                    <button onclick="addTestData()" class="button is-primary">Add test data</button>
+                </div>
+                <!-- <div class="level-item">
+                    <button onclick="init()" class="button is-primary">Load data</button>
+                </div> -->
                 <!-- <div class="level-item">
                     <button class="button is-loading">Button</button>
                 </div> -->
             </div>
         </div>
+
+        
+        <div class="modal" id="warningModal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Error</p>
+                <button class="delete" aria-label="close" onclick="hideWarning()"></button>
+              </header>
+              <section class="modal-card-body" id="warningModalBody">
+                <!-- Content ... -->
+              </section>
+              <footer class="modal-card-foot">
+                <button class="button is-danger is-large" onclick="hideWarning()">Close</button>
+              </footer>
+            </div>
+          </div>
+
+
       </section>
 </body>
 </html>

@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  settings
+spec:
+  selector:
+    name:  settings
+    app: aineko-settings
+  type:  NodePort
+  ports:
+  - name:  web
+    nodePort: 30164
+    port:  80
+    targetPort:  80

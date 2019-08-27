@@ -1,0 +1,29 @@
+version: "3.3"
+services:
+  postgres:
+    image: postgres:10.4
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: neverever
+      POSTGRES_DB: aineko
+    networks:
+      - aineko_settings_network
+  settings_app:
+    image: coderpews/aineko-settings:release-1.0.1
+    container_name: aineko_settings
+    networks:
+      - aineko_settings_network
+    environment:
+      profile: production
+      DB_CONNECTION_STRING: "jdbc:postgresql://postgres:5432/aineko?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8"
+      username: postgres
+      password: neverever
+    ports:
+      - "8090:8080"
+
+networks:
+  aineko_settings_network:
+    driver: bridge
